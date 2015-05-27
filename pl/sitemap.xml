@@ -4,35 +4,35 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-<loc>/pl/</loc>
-<lastmod>2015-05-26T23:47:16-00:00</lastmod>
+<loc>http://www.tomaszgawron.pl/pl/</loc>
+<lastmod>2015-05-27T01:57:21-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/pl/archives.html</loc>
-<lastmod>2015-05-26T23:47:16-00:00</lastmod>
+<loc>http://www.tomaszgawron.pl/pl/archives.html</loc>
+<lastmod>2015-05-27T01:57:21-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/pl/tags.html</loc>
-<lastmod>2015-05-26T23:47:16-00:00</lastmod>
+<loc>http://www.tomaszgawron.pl/pl/tags.html</loc>
+<lastmod>2015-05-27T01:57:21-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/pl/categories.html</loc>
-<lastmod>2015-05-26T23:47:16-00:00</lastmod>
+<loc>http://www.tomaszgawron.pl/pl/categories.html</loc>
+<lastmod>2015-05-27T01:57:21-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/pl/test_note.pl.html</loc>
+<loc>http://www.tomaszgawron.pl/pl/test_note.pl.html</loc>
 <lastmod>2015-05-26T00:00:00+02:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
