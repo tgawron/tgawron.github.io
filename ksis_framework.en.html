@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Tomasz Gawron" />
+        <meta name="copyright" content="Tomasz Gawron" />
+
+<meta name="keywords" content="software engineering, robotics, control engineering, ROS, articles, " />
+        <title>Introducing KSIS Framework  · Tomasz Gawron
+</title>
+        <link href="http://cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="http://www.tomaszgawron.pl/theme/css/style.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.tomaszgawron.pl/theme/css/solarizedlight.css" media="screen">
+        <link rel="shortcut icon" href="http://www.tomaszgawron.pl/theme/images/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="http://www.tomaszgawron.pl/theme/images/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="http://www.tomaszgawron.pl/theme/images/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="http://www.tomaszgawron.pl/theme/images/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="http://www.tomaszgawron.pl/theme/images/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="http://www.tomaszgawron.pl/theme/images/apple-touch-icon-144x144.png" />
+        <link rel="icon" href="http://www.tomaszgawron.pl/theme/images/apple-touch-icon-144x144.png" />
+    </head>
+    <body>
+        <div id="content-sans-footer">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="http://www.tomaszgawron.pl/"><span class=site-name>Tomasz Gawron</span></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right top-menu">
+                            <li ><a href="http://www.tomaszgawron.pl">Home</a></li>
+                            <li ><a href="http://www.tomaszgawron.pl/categories.html">Categories</a></li>
+                            <li ><a href="http://www.tomaszgawron.pl/tags.html">Tags</a></li>
+                            <li ><a href="http://www.tomaszgawron.pl/archives.html">Archives</a></li>
+                            <li><form class="navbar-search" action="http://www.tomaszgawron.pl/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span1"></div>
+                <div class="span10">
+<article>
+<div class="row-fluid">
+    <header class="page_header span10 offset2">
+    <h1><a href="http://www.tomaszgawron.pl/ksis_framework.en.html"> Introducing KSIS Framework  </a></h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+
+            <div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgheadline1">1. Introduction</a></li>
+<li><a href="#orgheadline13">2. KSIS Framework characteristics</a>
+<ul>
+<li><a href="#orgheadline2">2.1. Familiar, tried and tested tools</a></li>
+<li><a href="#orgheadline3">2.2. No repetition and minimal knowledge required</a></li>
+<li><a href="#orgheadline4">2.3. A simple API consisting of an embedded domain-specific language</a></li>
+<li><a href="#orgheadline5">2.4. Correctness guarantees and determinism</a></li>
+<li><a href="#orgheadline6">2.5. High performance and cheap abstractions</a></li>
+<li><a href="#orgheadline7">2.6. Flexible synchronization</a></li>
+<li><a href="#orgheadline8">2.7. Runtime reconfiguration</a></li>
+<li><a href="#orgheadline9">2.8. Some decisions were made for the developer</a></li>
+<li><a href="#orgheadline10">2.9. Write once, execute on different devices</a></li>
+<li><a href="#orgheadline11">2.10. Seamless ROS integration</a></li>
+<li><a href="#orgheadline12">2.11. Batteries included</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline14">3. Current state of development</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Robotic software systems developed in the recent years are designed to solve more and more complex tasks. To achieve their successful operation, those systems must robustly and efficiently process data flowing from diverse sources by utilizing complex algorithms developed at times by specialists from different fields. Such systems can quickly become hard to maintain and extend if not designed correctly. Moreover, since the field is young, many robotics systems are developed by researchers, who need an ability to rapidly prototype new functionalities and change structure of the system to validate new ideas. As the robotics community matured, several open source robotics middleware software packages emerged. Currently developers have many choices: from the widely adopted ROS, through real-time capable OROCOS, to more experimental URBI with its own language - urbiscript. While most of them provide acceptable solutions to common problems, it is my experience that most of them  do not provide a full solution to the specific problems faced by developers of real-time feedback control systems for robotics. KSIS Framework is a small and simple robotic middleware, a micro-middleware if You will, which attempts solve those specific problems as briefly described below.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline13" class="outline-2">
+<h2 id="orgheadline13"><span class="section-number-2">2</span> KSIS Framework characteristics</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2"><span class="section-number-3">2.1</span> Familiar, tried and tested tools</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+KSIS Framework is written a static C++ library with some auxiliary Python scripts. It is compatible with any C++11 compiler and can be used with an arbitrary development environemnt.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3"><span class="section-number-3">2.2</span> No repetition and minimal knowledge required</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Many existing robotic middlewares require more or less extensive knowledge of specific configuration files, conventions and semantics, which their user must keep in mind during prototyping, maintenance and debugging of the system. The large amount of user-maintained settings leads to many errors which could be easily avoided and confusion of new users or users returning after a significant break from development, which is often the case in academic environment. 
+</p>
+
+<p>
+Creating a new library of KSIS Framework modules is as simple as invoking a single script. Introducing a new module is as simple as creating a new file. Composing an executable application from modules is as simple as creating several objects or supplying another supported source of modules, which should be considered by KSIS Framework. The user is not required to update any configuration files or repeat any information. KSIS Framework infers it's knowledge about supplied modules from their definitions in C++ source code.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4"><span class="section-number-3">2.3</span> A simple API consisting of an embedded domain-specific language</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+KSIS Framework modules are defined in C++. A module is defined by a C++ class with a special annotation line. Contracts specifying data accepted and produced by the module are specified by definition of special member variables. Other than that, a module is a first-class object and can be treated as any other C++ class.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5"><span class="section-number-3">2.4</span> Correctness guarantees and determinism</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+Many middlewares introduce dynamic typing or other dynamic binding mechanism in such a way that, one cannot verify whether the modules producing data required for correct system operation have been loaded and connected properly to other modules. In KSIS Framework, different signals specified by the user as module inputs and outputs have different types. By definition, a set of modules can be composed by KSIS Framework in only one way. Thus, the user implicitly defines an arbitrarily complex system structure by defining simple modules. KSIS Framework can automatically determine if a set of modules can be safely composed. Missing data sources, spurious control signals, accidental signal feedback loops or modules with overlapping functionalities are detected. The errors are detected before application is run.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline6" class="outline-3">
+<h3 id="orgheadline6"><span class="section-number-3">2.5</span> High performance and cheap abstractions</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+KSIS Framework ensures a zero-copy dataflow between modules. The overhead of a single processing cycle for a module is a single function call. No interprocess communication, serialization or marshalling is required inside KSIS Framework. Creating and composing modules is cheap enough, that even simple functionality can be abstracted into module. Performance is never compromised by modularity.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline7" class="outline-3">
+<h3 id="orgheadline7"><span class="section-number-3">2.6</span> Flexible synchronization</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+The user can specify during module definition if processing carried out by the module should be triggered by specific signal updates or if it should be done periodically. Any combination of those is possible. It is guaranteed that modules triggering each other will be called in the order of triggering without any delays, since the generated call will be equivalent to a sequence of function calls with some additional processing. As a result, KSIS Framework enables the user to define complex, extensible, sequential processing chains without a performance penalty or problems with order of operations.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="orgheadline8"><span class="section-number-3">2.7</span> Runtime reconfiguration</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+Application structure can be changed by adding or removing modules at runtime. KSIS Framework will suspend the application, reconfigure and check for correctness of the modified structure. Module definitions can also provide parameters which can be modified outside of the KSIS Framework process.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline9" class="outline-3">
+<h3 id="orgheadline9"><span class="section-number-3">2.8</span> Some decisions were made for the developer</h3>
+<div class="outline-text-3" id="text-2-8">
+<p>
+It is worth noting that most of the problems are solved by taking a different approach to them, which simplifies their solution greatly. It is my belief that while flexibility is desired, API's allowing for multiple vastly different solutions to the same problems are not very helpful for developers. In that spirit, KSIS Framework forces its users to adopt a specific approach to some common problems and development tasks for the sake of standardization, simplicity and performance. The crucial benefit of such a development methodology is that the developer does not have to make any decisions about software architecture and software engineering problems. Instead the developer is forced to make explicit decisions about the logical structure of the system, which is his area of expertise in the first place.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline10" class="outline-3">
+<h3 id="orgheadline10"><span class="section-number-3">2.9</span> Write once, execute on different devices</h3>
+<div class="outline-text-3" id="text-2-9">
+<p>
+While KSIS Framework currently supports only PC's running Linux, a port for STM microcontrollers is being developed. Some early experiments have shown that control algorithms implemented in KSIS Framework can be used also in very constrained, embedded environments. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline11" class="outline-3">
+<h3 id="orgheadline11"><span class="section-number-3">2.10</span> Seamless ROS integration</h3>
+<div class="outline-text-3" id="text-2-10">
+<p>
+KSIS Framework is not designed to replace ROS, but to complement it in specific scenarios. Currently KSIS Framework can seamlessly integrate with ROS by connecting its signals to ROS topics and utilizing facilities such as e.g. ROS parameter server. This gives the user access to a vast amount of open source libraries in the ROS ecosystem from the KSIS Framework.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline12" class="outline-3">
+<h3 id="orgheadline12"><span class="section-number-3">2.11</span> Batteries included</h3>
+<div class="outline-text-3" id="text-2-11">
+<p>
+KSIS Framework is accompanied by KSIS Control library which utilizes KSIS Framework and ROS to provide a powerful motion control solution for mobile robots, with the emphasis on wheeled mobile robots. After implementation of few hardware-specific modules, the user of KSIS Control is provided with a control GUI, visualization, a simple control simulation environment, debugging tools, dynamic settings editor and a variety of closed-loop motion controllers for wheeled mobile robots.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline14" class="outline-2">
+<h2 id="orgheadline14"><span class="section-number-2">3</span> Current state of development</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+At the moment there are 3 kinds of wheeled mobile robot platforms controlled entirely by KSIS Control at the Chair of Control and Systems Engineering, Poznan University of Technology. Numerous experiments with those platforms have been performed to test the viability of KSIS Framework and KSIS Control. Several control and planning algorithms have been prototyped in KSIS Framework.
+</p>
+
+<p>
+Currently KSIS Framework is still in its development phase. While it is planned to be released publicly as a free library, an exact date of such a release is not yet known. If You want to take a peek at the current version, collaborate or suggest some features do not hesitate to emaile me at omasz.gawron.priv[at]gmail.com or tomasz.gawron[at]doctorate.put.poznan.pl.
+</p>
+</div>
+</div>
+
+<section>
+<p id="comment-message">Have a suggestion or Your own opinion? Comment, please. </p>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="http://www.tomaszgawron.pl/ksis_framework.en.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="comments">
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'tomaszgawron';
+        var disqus_identifier = 'http://www.tomaszgawron.pl/ksis_framework.en.html';
+    var disqus_url = 'http://www.tomaszgawron.pl/ksis_framework.en.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+            <aside>
+            <hr/>
+            <nav>
+            <ul class="articles_timeline">
+            </ul>
+            </nav>
+            </aside>
+        </div>
+        <section>
+        <div class="span2" style="float:right;font-size:0.9em;">
+ 
+            <h4>Published</h4>
+            <time pubdate="pubdate" datetime="2015-08-30T00:00:00+02:00">Aug 30, 2015</time>
+            <h4>Category</h4>
+            <a class="category-link" href="/categories.html#articles-ref">articles</a> 
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article"> 
+                <li><a href="/tags.html#control-engineering-ref">control engineering
+                    <span>1</span>
+</a></li>
+                <li><a href="/tags.html#robotics-ref">robotics
+                    <span>1</span>
+</a></li>
+                <li><a href="/tags.html#ROS-ref">ROS
+                    <span>1</span>
+</a></li>
+                <li><a href="/tags.html#software-engineering-ref">software engineering
+                    <span>1</span>
+</a></li>
+            </ul>
+
+        </div>
+        </section>
+</div>
+</article>
+                </div>
+                <div class="span1"></div>
+            </div>
+        </div>
+    </div>
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
+    </ul>
+</div>
+</footer>            <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+	<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script type="text/javascript">
+    var disqus_shortname = 'tomaszgawron';
+
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+    </script>
+        <script  language="javascript" type="text/javascript">
+            function uncollapse() {
+                var hash_str = window.location.hash;
+                if (window.location.hash.match(/^#comment-\d+$/))
+                {
+                    var hash_str = '#disqus_thread';
+                }
+                $(hash_str).collapse({
+                    toggle: true
+                    })
+            }
+        </script>
+
+        <script type="text/javascript" language="JavaScript">
+            uncollapse(); 
+        </script>
+    </body>
+</html>
